@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/zdhe/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/6.0.0/3a10b25b6820e19102e118711afe6a66c0bae123/butterknife-6.0.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="3a10b25b6820e19102e118711afe6a66c0bae123">
+        <dex dex="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/pre-dexed/debug/butterknife-6.0.0-234a40caa52687a2d45b9b41b35ed655017db301.jar" />
+    </item>
+    <item
+        jar="/Users/zdhe/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3/5fc52c41ef0239d1093a1eb7c3697036183677ce/gson-2.3.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
+        <dex dex="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/pre-dexed/debug/gson-2.3-b0f66c850077e5bb540058994b7087eb0e996d6c.jar" />
+    </item>
+    <item
+        jar="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3">
+        <dex dex="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/pre-dexed/debug/classes-a71d22c9d2fee1d2c0c545467f26acbe3a6fe28b.jar" />
+    </item>
+    <item
+        jar="/Users/zdhe/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit/retrofit/1.8.0/a517f29ed06be2b2879524fcd94b6e9b36e2e0b5/retrofit-1.8.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="a517f29ed06be2b2879524fcd94b6e9b36e2e0b5">
+        <dex dex="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/pre-dexed/debug/retrofit-1.8.0-9696ae2e2fc59d5757fd6cc390338183e2874afd.jar" />
+    </item>
+    <item
+        jar="/Users/zdhe/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.4.0/f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2/picasso-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2">
+        <dex dex="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/pre-dexed/debug/picasso-2.4.0-2b221370c3304cc253e639cd6d89b946b1294eef.jar" />
+    </item>
+    <item
+        jar="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="7ae2d38807a43b2f2185ff4089a92c790b579e54">
+        <dex dex="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/pre-dexed/debug/classes-b6682867f8cbd8c0c0cbae7e81f677192a5d5242.jar" />
+    </item>
+    <item
+        jar="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/libs/internal_impl-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f">
+        <dex dex="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.2-e9ebddb34296cdd5f5e792d9af26e67d08f1a201.jar" />
+    </item>
+    <item
+        jar="/Users/zdhe/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.2/support-annotations-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
+        <dex dex="/Users/zdhe/AndroidStudioProjects/APE/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.2-fc50b504505d157ca4813ae11ba7a4abe2ded0b8.jar" />
+    </item>
+
+</items>
