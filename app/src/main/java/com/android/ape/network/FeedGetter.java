@@ -32,6 +32,7 @@ public class FeedGetter {
     }
 
     private void preProcessData(Feed feed) {
+        // Delete null value from data
         for (int i = 0; i < feed.getRows().size(); i++) {
             if (feed.getRows().get(i).getTitle() == null
                     && feed.getRows().get(i).getDescription() == null

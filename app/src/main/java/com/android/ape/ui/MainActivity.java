@@ -105,14 +105,17 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         @Override
         protected void onPostExecute(Feed feed) {
             if (mSwipeRefreshLayout.isRefreshing()) {
+                // pull to refresh
                 mSwipeRefreshLayout.setRefreshing(false);
             } else {
                 mProgressBar.setVisibility(View.GONE);
             }
 
             if (feed == null) {
+                // Get feed error
                 Toast.makeText(MainActivity.this, R.string.message_refresh_wrong, Toast.LENGTH_SHORT).show();
             } else {
+                // Get feed success
                 updateFeedListContent(feed);
                 updateActionbarTitle(feed.getTitle());
             }
