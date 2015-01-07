@@ -11,8 +11,6 @@ public class FeedGetter {
     private RestAdapter mRestAdapter;
     private FeedService mFeedService;
 
-    private Feed mFeed;
-
     public FeedGetter() {
         mRestAdapter = new RestAdapter.Builder()
                 .setEndpoint(Util.NET_PATH)
@@ -21,22 +19,24 @@ public class FeedGetter {
         mFeedService = mRestAdapter.create(FeedService.class);
     }
 
-    public Feed getFeedFromServer() {
+    public Feed getFromServer() {
+        Feed feed = null;
+
         try {
-            mFeed = mFeedService.getFeedFromServer();
-            deleteNullValueFromFeed();
+            feed = mFeedService.getFromServer();
+            preProcessData(feed);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return mFeed;
+        return feed;
     }
 
-    private void deleteNullValueFromFeed() {
-        for (int i = 0; i < mFeed.getRows().size(); i++) {
-            if (mFeed.getRows().get(i).getTitle() == null
-                    && mFeed.getRows().get(i).getDescription() == null
-                    && mFeed.getRows().get(i).getImageHref() == null) {
-                mFeed.getRows().remove(i);
+    private void preProcessData(Feed feed) {
+        for (int i = 0; i < feed.getRows().size(); i++) {
+            if (feed.getRows().get(i).getTitle() == null
+                    && feed.getRows().get(i).getDescription() == null
+                    && feed.getRows().get(i).getImageHref() == null) {
+                feed.getRows().remove(i);
                 i = i - 1;
             }
         }

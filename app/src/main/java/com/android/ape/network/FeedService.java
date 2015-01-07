@@ -7,5 +7,5 @@ import retrofit.http.GET;
 
 public interface FeedService {
     @GET(Util.NET_VALUE)
-    Feed getFeedFromServer();
+    Feed getFromServer();
 }

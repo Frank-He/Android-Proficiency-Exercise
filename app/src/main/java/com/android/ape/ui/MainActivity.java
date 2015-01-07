@@ -92,7 +92,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
         @Override
         protected Feed doInBackground(Void... params) {
-            return mFeedGetter.getFeedFromServer();
+            return mFeedGetter.getFromServer();
         }
 
         @Override
