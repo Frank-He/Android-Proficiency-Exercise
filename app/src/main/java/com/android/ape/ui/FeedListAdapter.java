@@ -37,9 +37,10 @@ public class FeedListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = new ViewHolder();
+        ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.feed_list_item_layout, null);
+            viewHolder = new ViewHolder();
             viewHolder.title = (TextView) convertView.findViewById(R.id.title);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
@@ -60,7 +61,7 @@ public class FeedListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    class ViewHolder {
+    private class ViewHolder {
         TextView title;
         TextView description;
         ImageView image;

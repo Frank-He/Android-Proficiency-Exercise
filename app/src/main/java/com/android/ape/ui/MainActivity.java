@@ -88,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         mFeedListAdapter.updateFeedData(feed);
     }
 
-    class FeedLoadTask extends AsyncTask<Void, Void, Feed> {
+    private class FeedLoadTask extends AsyncTask<Void, Void, Feed> {
 
         @Override
         protected Feed doInBackground(Void... params) {
