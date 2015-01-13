@@ -86,6 +86,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             loadFeedFromServer();
             return true;
         } else if (id == R.id.action_search) {
+            mSearchBar.setText("");
             if (mSearchBar.getVisibility() == View.VISIBLE) {
                 mSearchBar.setVisibility(View.GONE);
             } else {
@@ -108,12 +109,14 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     protected void onDestroy() {
         super.onDestroy();
         mSubscription.unsubscribe();
+        mSearchSubscription.unsubscribe();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mSubscription.unsubscribe();
+        mSearchSubscription.unsubscribe();
     }
 
     @OnTextChanged(R.id.user_search_bar)
@@ -184,8 +187,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         return Observable.create(new Observable.OnSubscribe<Feed>() {
             @Override
             public void call(Subscriber<? super Feed> subscriber) {
-                subscriber.onNext(mFeedGetter.getFromServer());
                 mSearchBar.setVisibility(View.GONE);
+                subscriber.onNext(mFeedGetter.getFromServer());
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
