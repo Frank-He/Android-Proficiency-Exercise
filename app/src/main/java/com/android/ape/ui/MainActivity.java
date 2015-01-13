@@ -156,26 +156,30 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         mFeedListAdapter.updateFeedData(feed);
     }
 
+    private void clearRefreshUI() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            // pull to refresh
+            mSwipeRefreshLayout.setRefreshing(false);
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
+
     private Observer<Feed> mFeedObserver = new Observer<Feed>() {
         @Override
         public void onCompleted() {
-            mSubscription.unsubscribe();
         }
 
         @Override
         public void onError(Throwable e) {
             Toast.makeText(MainActivity.this, R.string.message_refresh_wrong, Toast.LENGTH_SHORT).show();
-            mSubscription.unsubscribe();
+
+            clearRefreshUI();
         }
 
         @Override
         public void onNext(Feed feed) {
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                // pull to refresh
-                mSwipeRefreshLayout.setRefreshing(false);
-            } else {
-                mProgressBar.setVisibility(View.GONE);
-            }
+            clearRefreshUI();
 
             // Get feed success
             updateFeedListContent(feed);
@@ -197,12 +201,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     private Observer<String> mSearchObserver = new Observer<String>() {
         @Override
         public void onCompleted() {
-
         }
 
         @Override
         public void onError(Throwable e) {
-
         }
 
         @Override
