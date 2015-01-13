@@ -3,6 +3,8 @@
 
     <string name="app_name">Android Proficiency Exercise</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_search">Search</string>
+    <string name="action_search_hint">Enter search text</string>
     <string name="message_refresh_wrong">Something wrong!</string>
 
 </resources>
