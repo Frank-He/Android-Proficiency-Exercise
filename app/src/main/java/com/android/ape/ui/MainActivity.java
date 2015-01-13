@@ -83,6 +83,18 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         loadFeedFromServer();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSubscription.unsubscribe();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mSubscription.unsubscribe();
+    }
+
     private void loadFeedFromServer() {
 //        FeedLoadTask feedLoadTask = new FeedLoadTask();
 //        feedLoadTask.execute((Void[]) null);
