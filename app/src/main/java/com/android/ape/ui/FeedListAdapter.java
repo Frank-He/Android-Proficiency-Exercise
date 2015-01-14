@@ -10,6 +10,9 @@ import android.widget.TextView;
 import com.android.ape.model.Feed;
 import com.squareup.picasso.Picasso;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class FeedListAdapter extends BaseAdapter {
 
     private Context mContext;
@@ -40,10 +43,7 @@ public class FeedListAdapter extends BaseAdapter {
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.feed_list_item_layout, null);
-            viewHolder = new ViewHolder();
-            viewHolder.title = (TextView) convertView.findViewById(R.id.title);
-            viewHolder.description = (TextView) convertView.findViewById(R.id.description);
-            viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -61,9 +61,16 @@ public class FeedListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    private class ViewHolder {
+    static class ViewHolder {
+        @InjectView(R.id.title)
         TextView title;
+        @InjectView(R.id.description)
         TextView description;
+        @InjectView(R.id.image)
         ImageView image;
+
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 }
