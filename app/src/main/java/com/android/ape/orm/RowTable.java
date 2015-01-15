@@ -1,6 +1,6 @@
-package com.android.ape.model;
+package com.android.ape.orm;
 
-public class Row {
+public class RowTable {
 
     private String title;
 

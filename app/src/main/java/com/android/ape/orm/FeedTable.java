@@ -1,12 +1,12 @@
-package com.android.ape.model;
+package com.android.ape.orm;
 
 import java.util.List;
 
-public class Feed {
+public class FeedTable {
 
     private String title;
 
-    private List<Row> rows;
+    private List<RowTable> rows;
 
     public String getTitle() {
         return title;
@@ -16,11 +16,11 @@ public class Feed {
         this.title = title;
     }
 
-    public List<Row> getRows() {
+    public List<RowTable> getRows() {
         return rows;
     }
 
-    public void setRows(List<Row> rows) {
+    public void setRows(List<RowTable> rows) {
         this.rows = rows;
     }
 }
