@@ -1,6 +1,8 @@
 package com.android.ape.orm;
 
-public class RowTable {
+import org.litepal.crud.DataSupport;
+
+public class RowTable extends DataSupport {
 
     private String title;
 

@@ -1,5 +1,6 @@
 package com.android.ape.ui;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import com.android.ape.model.Feed;
 import com.android.ape.network.FeedGetter;
 import com.android.ape.util.Util;
+
+import org.litepal.tablemanager.Connector;
 
 import java.util.concurrent.TimeUnit;
 
@@ -65,6 +68,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
         mFeedListAdapter = new FeedListAdapter(this);
         mFeedList.setAdapter(mFeedListAdapter);
+
+        initDatabase();
 
         loadFeedFromServer();
 
@@ -122,6 +127,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     @OnTextChanged(R.id.user_search_bar)
     public void searchTextEntered(CharSequence charsEntered) {
         mSearchTextSubject.onNext(getASearchObservableFor(charsEntered.toString()));
+    }
+
+    private void initDatabase() {
+        SQLiteDatabase db = Connector.getDatabase();
     }
 
     private void initSearchBar() {

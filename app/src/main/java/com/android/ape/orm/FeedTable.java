@@ -1,8 +1,10 @@
 package com.android.ape.orm;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
-public class FeedTable {
+public class FeedTable extends DataSupport {
 
     private String title;
 
