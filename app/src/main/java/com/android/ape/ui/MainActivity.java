@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.android.ape.model.Feed;
 import com.android.ape.network.FeedGetter;
+import com.android.ape.orm.OrmWorker;
 import com.android.ape.util.Util;
 
 import org.litepal.tablemanager.Connector;
@@ -131,6 +132,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
     private void initDatabase() {
         SQLiteDatabase db = Connector.getDatabase();
+        OrmWorker.getInstance();
     }
 
     private void initSearchBar() {

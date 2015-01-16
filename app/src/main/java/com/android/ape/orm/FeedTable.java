@@ -2,13 +2,14 @@ package com.android.ape.orm;
 
 import org.litepal.crud.DataSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FeedTable extends DataSupport {
 
     private String title;
 
-    private List<RowTable> rows;
+    private List<RowTable> rows = new ArrayList<RowTable>();
 
     public String getTitle() {
         return title;

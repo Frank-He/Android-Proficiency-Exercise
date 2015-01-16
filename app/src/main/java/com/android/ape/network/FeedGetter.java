@@ -2,9 +2,8 @@ package com.android.ape.network;
 
 import com.android.ape.model.Feed;
 import com.android.ape.model.Row;
+import com.android.ape.orm.OrmWorker;
 import com.android.ape.util.Util;
-
-import java.util.ArrayList;
 
 import retrofit.RestAdapter;
 
@@ -13,9 +12,7 @@ public class FeedGetter {
 
     private RestAdapter mRestAdapter;
     private FeedService mFeedService;
-
-    private Feed mFeed = null;
-    private Feed mSearchResult = new Feed();
+    private OrmWorker mOrmWorker;
 
     public FeedGetter() {
         mRestAdapter = new RestAdapter.Builder()
@@ -24,28 +21,33 @@ public class FeedGetter {
 
         mFeedService = mRestAdapter.create(FeedService.class);
 
-        mSearchResult.setRows(new ArrayList<Row>());
+        mOrmWorker = OrmWorker.getInstance();
     }
 
     public Feed getFromServer() {
+        Feed feed = null;
+
         try {
-            mFeed = mFeedService.getFromServer();
-            preProcessData(mFeed);
+            feed = mFeedService.getFromServer();
+            preProcessData(feed);
+            saveToDatabase(feed);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return mFeed;
+        return feed;
     }
 
     public Feed getSearchResult(String input) {
-        mSearchResult.getRows().clear();
-        for (Row r : mFeed.getRows()) {
+        Feed searchResult = new Feed();
+        Feed fromDB = mOrmWorker.getFeedFromDatabase();
+
+        for (Row r : fromDB.getRows()) {
             if (r.getTitle().toLowerCase().contains(input.toLowerCase())) {
-                mSearchResult.getRows().add(r);
+                searchResult.getRows().add(r);
             }
         }
 
-        return mSearchResult;
+        return searchResult;
     }
 
     private void preProcessData(Feed feed) {
@@ -58,6 +60,10 @@ public class FeedGetter {
                 i = i - 1;
             }
         }
+    }
+
+    private void saveToDatabase(Feed feed) {
+        mOrmWorker.saveFeedToDatabase(feed);
     }
 
 }
