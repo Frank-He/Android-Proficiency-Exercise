@@ -1,9 +1,11 @@
 package com.android.ape.model;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Feed {
+public class Feed extends DataSupport {
 
     private String title;
 

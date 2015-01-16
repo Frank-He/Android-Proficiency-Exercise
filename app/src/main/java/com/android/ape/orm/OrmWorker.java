@@ -21,44 +21,18 @@ public class OrmWorker {
         return mOrmWorker;
     }
 
-    private RowTable addItemToRowTable(Row row) {
-        RowTable rowTable = new RowTable();
-        rowTable.setTitle(row.getTitle());
-        rowTable.setDescription(row.getDescription());
-        rowTable.setImageHref(row.getImageHref());
-        rowTable.save();
-        return rowTable;
-    }
-
     public boolean saveFeedToDatabase(Feed feed) {
-        DataSupport.deleteAll(FeedTable.class);
-        DataSupport.deleteAll(RowTable.class);
-
-        FeedTable feedTable = new FeedTable();
-        feedTable.setTitle(feed.getTitle());
+        DataSupport.deleteAll(Feed.class);
+        DataSupport.deleteAll(Row.class);
 
         for (Row row : feed.getRows()) {
-            feedTable.getRows().add(addItemToRowTable(row));
+            row.save();
         }
 
-        return feedTable.save();
+        return feed.save();
     }
 
     public Feed getFeedFromDatabase() {
-        Feed feed = new Feed();
-
-        FeedTable feedTable = DataSupport.findFirst(FeedTable.class, true);
-
-        feed.setTitle(feedTable.getTitle());
-        for (RowTable rowTable : feedTable.getRows()) {
-            Row row = new Row();
-            row.setTitle(rowTable.getTitle());
-            row.setDescription(rowTable.getDescription());
-            row.setImageHref(rowTable.getImageHref());
-
-            feed.getRows().add(row);
-        }
-
-        return feed;
+        return DataSupport.findFirst(Feed.class, true);
     }
 }

@@ -1,6 +1,8 @@
 package com.android.ape.model;
 
-public class Row {
+import org.litepal.crud.DataSupport;
+
+public class Row extends DataSupport {
 
     private String title;
 

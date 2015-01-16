@@ -2,11 +2,11 @@
 <litepal>
     <dbname value="database"></dbname>
 
-    <version value="1"></version>
+    <version value="2"></version>
 
     <list>
-        <mapping class="com.android.ape.orm.FeedTable"></mapping>
-        <mapping class="com.android.ape.orm.RowTable"></mapping>
+        <mapping class="com.android.ape.model.Feed"></mapping>
+        <mapping class="com.android.ape.model.Row"></mapping>
     </list>
 
 </litepal>
