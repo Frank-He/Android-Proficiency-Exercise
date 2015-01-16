@@ -186,6 +186,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             Toast.makeText(MainActivity.this, R.string.message_refresh_wrong, Toast.LENGTH_SHORT).show();
 
             clearRefreshUI();
+            updateFeedListContent(mFeedGetter.getFromDatabase());
         }
 
         @Override

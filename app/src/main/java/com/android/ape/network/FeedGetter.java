@@ -39,7 +39,7 @@ public class FeedGetter {
 
     public Feed getSearchResult(String input) {
         Feed searchResult = new Feed();
-        Feed fromDB = mOrmWorker.getFeedFromDatabase();
+        Feed fromDB = getFromDatabase();
 
         for (Row r : fromDB.getRows()) {
             if (r.getTitle().toLowerCase().contains(input.toLowerCase())) {
@@ -48,6 +48,10 @@ public class FeedGetter {
         }
 
         return searchResult;
+    }
+
+    public Feed getFromDatabase() {
+        return mOrmWorker.getFeedFromDatabase();
     }
 
     private void preProcessData(Feed feed) {
