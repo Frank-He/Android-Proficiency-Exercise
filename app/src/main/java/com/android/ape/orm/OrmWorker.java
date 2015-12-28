@@ -7,17 +7,12 @@ import org.litepal.crud.DataSupport;
 
 public class OrmWorker {
 
-    private static OrmWorker mOrmWorker = null;
+    private static OrmWorker mOrmWorker = new OrmWorker();
 
     private OrmWorker() {
-
     }
 
     public static OrmWorker getInstance() {
-        if (mOrmWorker == null) {
-            mOrmWorker = new OrmWorker();
-        }
-
         return mOrmWorker;
     }
 
