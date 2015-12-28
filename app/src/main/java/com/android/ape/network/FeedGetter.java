@@ -2,17 +2,17 @@ package com.android.ape.network;
 
 import com.android.ape.model.Feed;
 import com.android.ape.model.Row;
-import com.android.ape.orm.OrmWorker;
+import com.android.ape.orm.OrmFeedWorker;
 import com.android.ape.util.Util;
 
 import retrofit.RestAdapter;
 
 
-public class FeedGetter {
+public class FeedGetter implements IFeedGetter {
 
     private RestAdapter mRestAdapter;
     private FeedService mFeedService;
-    private OrmWorker mOrmWorker;
+    private OrmFeedWorker mOrmFeedWorker;
 
     public FeedGetter() {
         mRestAdapter = new RestAdapter.Builder()
@@ -21,9 +21,10 @@ public class FeedGetter {
 
         mFeedService = mRestAdapter.create(FeedService.class);
 
-        mOrmWorker = OrmWorker.getInstance();
+        mOrmFeedWorker = OrmFeedWorker.getInstance();
     }
 
+    @Override
     public Feed getFromServer() {
         Feed feed = null;
 
@@ -37,6 +38,12 @@ public class FeedGetter {
         return feed;
     }
 
+    @Override
+    public Feed getFromDatabase() {
+        return mOrmFeedWorker.getFeedFromDatabase();
+    }
+
+    @Override
     public Feed getSearchResult(String input) {
         Feed searchResult = new Feed();
         Feed fromDB = getFromDatabase();
@@ -48,10 +55,6 @@ public class FeedGetter {
         }
 
         return searchResult;
-    }
-
-    public Feed getFromDatabase() {
-        return mOrmWorker.getFeedFromDatabase();
     }
 
     private void preProcessData(Feed feed) {
@@ -67,7 +70,7 @@ public class FeedGetter {
     }
 
     private void saveToDatabase(Feed feed) {
-        mOrmWorker.saveFeedToDatabase(feed);
+        mOrmFeedWorker.saveFeedToDatabase(feed);
     }
 
 }

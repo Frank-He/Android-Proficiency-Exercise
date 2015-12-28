@@ -1,39 +1,26 @@
 package com.android.ape.ui;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.ape.model.Feed;
-import com.android.ape.network.FeedGetter;
-import com.android.ape.orm.OrmWorker;
-import com.android.ape.util.Util;
+import com.android.ape.presenter.MainViewPresenter;
 
 import org.litepal.tablemanager.Connector;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnTextChanged;
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.app.AppObservable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subjects.PublishSubject;
 
-public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener, IMainView {
 
     @InjectView(R.id.feed_list)
     ListView mFeedList;
@@ -48,13 +35,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private FeedListAdapter mFeedListAdapter;
-
-    private FeedGetter mFeedGetter;
-
-    private Subscription mSubscription;
-
-    private Subscription mSearchSubscription;
-    private PublishSubject<Observable<String>> mSearchTextSubject;
+    private MainViewPresenter mMainViewPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,19 +43,17 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
+        initDatabase();
+
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_dark);
-
-        mFeedGetter = new FeedGetter();
 
         mFeedListAdapter = new FeedListAdapter(this);
         mFeedList.setAdapter(mFeedListAdapter);
 
-        initDatabase();
+        mMainViewPresenter = new MainViewPresenter(this);
 
-        loadFeedFromServer();
-
-        initSearchBar();
+        mMainViewPresenter.loadFeedFromServer();
     }
 
     @Override
@@ -88,18 +67,11 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            loadFeedFromServer();
+            mMainViewPresenter.clickRefreshButtonAction();
             return true;
         } else if (id == R.id.action_search) {
-            mSearchBar.setText("");
-            if (mSearchBar.getVisibility() == View.VISIBLE) {
-                mSearchBar.setVisibility(View.GONE);
-            } else {
-                mSearchBar.setVisibility(View.VISIBLE);
-            }
+            mMainViewPresenter.clickSearchButtonAction();
         } else {
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -108,120 +80,78 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         mSwipeRefreshLayout.setRefreshing(true);
-        loadFeedFromServer();
+        mMainViewPresenter.loadFeedFromServer();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mSubscription.unsubscribe();
-        mSearchSubscription.unsubscribe();
+        mMainViewPresenter.doUnsubscribe();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mSubscription.unsubscribe();
-        mSearchSubscription.unsubscribe();
+        mMainViewPresenter.doUnsubscribe();
     }
 
     @OnTextChanged(R.id.user_search_bar)
     public void searchTextEntered(CharSequence charsEntered) {
-        mSearchTextSubject.onNext(getASearchObservableFor(charsEntered.toString()));
+        mMainViewPresenter.searchTextEntered(charsEntered);
     }
 
-    private void initDatabase() {
-        SQLiteDatabase db = Connector.getDatabase();
-        OrmWorker.getInstance();
+    @Override
+    public void setSearchBarState(int state) {
+        mSearchBar.setVisibility(state);
     }
 
-    private void initSearchBar() {
-        mSearchBar.setVisibility(View.GONE);
-        mSearchTextSubject = PublishSubject.create();
-
-        mSearchSubscription = AppObservable.bindActivity(this, Observable.switchOnNext(mSearchTextSubject))
-                .debounce(Util.SEARCH_TIME_OUT, TimeUnit.MILLISECONDS, Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mSearchObserver);
+    @Override
+    public void showErrorMessage() {
+        Toast.makeText(MainActivity.this, R.string.message_refresh_wrong, Toast.LENGTH_SHORT).show();
     }
 
-    private Observable<String> getASearchObservableFor(final String searchText) {
-        return Observable.create(new Observable.OnSubscribe<String>() {
-
-            @Override
-            public void call(Subscriber<? super String> subscriber) {
-                subscriber.onNext(searchText);
-            }
-        }).subscribeOn(Schedulers.io());
-    }
-
-    private void loadFeedFromServer() {
-        mSubscription = createFeedObservable().subscribe(mFeedObserver);
-    }
-
-    protected void updateActionbarTitle(String title) {
-        setTitle(title);
-    }
-
-    private void updateFeedListContent(Feed feed) {
+    @Override
+    public void updateFeedListContent(Feed feed) {
         mFeedListAdapter.updateFeedData(feed);
     }
 
-    private void clearRefreshUI() {
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            // pull to refresh
-            mSwipeRefreshLayout.setRefreshing(false);
-        } else {
-            mProgressBar.setVisibility(View.GONE);
-        }
+    @Override
+    public void updateActionbarTitle(String title) {
+        setTitle(title);
     }
 
-    private Observer<Feed> mFeedObserver = new Observer<Feed>() {
-        @Override
-        public void onCompleted() {
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            Toast.makeText(MainActivity.this, R.string.message_refresh_wrong, Toast.LENGTH_SHORT).show();
-
-            clearRefreshUI();
-            updateFeedListContent(mFeedGetter.getFromDatabase());
-        }
-
-        @Override
-        public void onNext(Feed feed) {
-            clearRefreshUI();
-
-            // Get feed success
-            updateFeedListContent(feed);
-            updateActionbarTitle(feed.getTitle());
-        }
-    };
-
-    private Observable<Feed> createFeedObservable() {
-        return Observable.create(new Observable.OnSubscribe<Feed>() {
-            @Override
-            public void call(Subscriber<? super Feed> subscriber) {
-                mSearchBar.setVisibility(View.GONE);
-                subscriber.onNext(mFeedGetter.getFromServer());
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
+    @Override
+    public void setProgressBarState(int state) {
+        mProgressBar.setVisibility(state);
     }
 
-    private Observer<String> mSearchObserver = new Observer<String>() {
-        @Override
-        public void onCompleted() {
-        }
+    @Override
+    public void setSearchBarContent(CharSequence text) {
+        mSearchBar.setText(text);
+    }
 
-        @Override
-        public void onError(Throwable e) {
-        }
+    @Override
+    public int getSearchBarState() {
+        return mSearchBar.getVisibility();
+    }
 
-        @Override
-        public void onNext(String s) {
-            updateFeedListContent(mFeedGetter.getSearchResult(s));
-        }
-    };
+    @Override
+    public Boolean isRefresh() {
+        return mSwipeRefreshLayout.isRefreshing();
+    }
+
+    @Override
+    public void setRefreshViewState(Boolean state) {
+        mSwipeRefreshLayout.setRefreshing(state);
+    }
+
+    @Override
+    public Activity getCurrentActivity() {
+        return this;
+    }
+
+    private void initDatabase() {
+        Connector.getDatabase();
+    }
+
 }

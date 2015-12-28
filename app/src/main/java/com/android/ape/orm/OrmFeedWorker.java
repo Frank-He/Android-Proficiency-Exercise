@@ -5,15 +5,15 @@ import com.android.ape.model.Row;
 
 import org.litepal.crud.DataSupport;
 
-public class OrmWorker {
+public class OrmFeedWorker {
 
-    private static OrmWorker mOrmWorker = new OrmWorker();
+    private static OrmFeedWorker mOrmFeedWorker = new OrmFeedWorker();
 
-    private OrmWorker() {
+    private OrmFeedWorker() {
     }
 
-    public static OrmWorker getInstance() {
-        return mOrmWorker;
+    public static OrmFeedWorker getInstance() {
+        return mOrmFeedWorker;
     }
 
     public boolean saveFeedToDatabase(Feed feed) {
@@ -30,4 +30,5 @@ public class OrmWorker {
     public Feed getFeedFromDatabase() {
         return DataSupport.findFirst(Feed.class, true);
     }
+
 }
