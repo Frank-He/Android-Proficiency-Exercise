@@ -2,6 +2,7 @@ package com.android.ape.presenter;
 
 import android.view.View;
 
+import com.android.ape.event.UpdateFeedListEvent;
 import com.android.ape.model.Feed;
 import com.android.ape.network.FeedGetter;
 import com.android.ape.network.IFeedGetter;
@@ -10,6 +11,7 @@ import com.android.ape.util.Util;
 
 import java.util.concurrent.TimeUnit;
 
+import de.greenrobot.event.EventBus;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -103,7 +105,7 @@ public class MainViewPresenter {
             mMainView.showErrorMessage();
 
             clearRefreshUI();
-            mMainView.updateFeedListContent(mFeedGetter.getFromDatabase());
+            EventBus.getDefault().post(new UpdateFeedListEvent(mFeedGetter.getFromDatabase()));
         }
 
         @Override
@@ -111,7 +113,7 @@ public class MainViewPresenter {
             clearRefreshUI();
 
             // Get feed success
-            mMainView.updateFeedListContent(feed);
+            EventBus.getDefault().post(new UpdateFeedListEvent(feed));
             mMainView.updateActionbarTitle(feed.getTitle());
         }
     };
@@ -127,7 +129,7 @@ public class MainViewPresenter {
 
         @Override
         public void onNext(String s) {
-            mMainView.updateFeedListContent(mFeedGetter.getSearchResult(s));
+            EventBus.getDefault().post(new UpdateFeedListEvent(mFeedGetter.getSearchResult(s)));
         }
     };
 

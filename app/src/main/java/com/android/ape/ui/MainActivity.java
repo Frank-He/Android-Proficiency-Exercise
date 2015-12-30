@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.ape.event.UpdateFeedListEvent;
 import com.android.ape.model.Feed;
 import com.android.ape.presenter.MainViewPresenter;
 
@@ -19,6 +20,7 @@ import org.litepal.tablemanager.Connector;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnTextChanged;
+import de.greenrobot.event.EventBus;
 
 public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener, IMainView {
 
@@ -42,6 +44,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+
+        EventBus.getDefault().register(this);
 
         initDatabase();
 
@@ -87,6 +91,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     protected void onDestroy() {
         super.onDestroy();
         mMainViewPresenter.doUnsubscribe();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -108,11 +113,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     @Override
     public void showErrorMessage() {
         Toast.makeText(MainActivity.this, R.string.message_refresh_wrong, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void updateFeedListContent(Feed feed) {
-        mFeedListAdapter.updateFeedData(feed);
     }
 
     @Override
@@ -152,6 +152,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
     private void initDatabase() {
         Connector.getDatabase();
+    }
+
+    public void onEventMainThread(UpdateFeedListEvent event) {
+        mFeedListAdapter.updateFeedData(event.getFeed());
     }
 
 }

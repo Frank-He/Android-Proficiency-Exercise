@@ -8,8 +8,6 @@ public interface IMainView {
 
     public void showErrorMessage();
 
-    public void updateFeedListContent(Feed feed);
-
     public void updateActionbarTitle(String title);
 
     public void setSearchBarState(int state);
